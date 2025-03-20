@@ -1,0 +1,56 @@
+name: windows
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'doc/**'
+      - 'docs/**'
+      - 'README.md'
+      - 'DEVELOPNOTE.md'
+      - 'CHANGELOG.md'
+      - 'CODE_OF_CONDUCT.md'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/PULL_REQUEST_TEMPLATE/**'
+      - 'TODO.md'
+      - '.readthedocs.yaml'
+    tags:
+      - V**
+  pull_request:
+    branches: [ main ]
+    paths-ignore:
+      - 'doc/**'
+      - 'docs/**'
+      - 'README.md'
+      - 'DEVELOPNOTE.md'
+      - 'CHANGELOG.md'
+      - 'CODE_OF_CONDUCT.md'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/PULL_REQUEST_TEMPLATE/**'
+      - 'TODO.md'
+      - '.readthedocs.yaml'
+  workflow_dispatch:
+
+jobs:
+  windows:
+    runs-on: windows-2022
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: install qt static
+        uses: orestonce/install-qt-static@v0.4.3
+        with:
+          version: Qt6.5.3-Windows-x86_64-MinGW13.2.0-ucrt-staticFull-20240527
+
+      - name: build  
+        run: |
+          qmake && mingw32-make release
+          dir release
+
+      - name: Upload build asserts
+        uses: actions/upload-artifact@v4
+        with:
+          path: |
+            ./release/*.exe
+
