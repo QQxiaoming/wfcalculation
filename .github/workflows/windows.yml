@@ -36,7 +36,7 @@ jobs:
     runs-on: windows-2022
 
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - name: install qt static
         uses: orestonce/install-qt-static@v0.4.3
